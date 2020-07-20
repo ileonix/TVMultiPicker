@@ -31,5 +31,6 @@ extension UIColor {
     static let mpRed        = UIColor(red: 0.94, green: 0.29, blue: 0.24, alpha: 1.0)
     static let mpDarkGrey   = UIColor(red: 0.24, green: 0.24, blue: 0.23, alpha: 1.0)
     static let mpLightGrey  = UIColor(red: 0.87, green: 0.87, blue: 0.87, alpha: 1.0)
+    static let mpBugabooInter = UIColor(red: 114.0/255.0, green: 55.0/255.0, blue: 189.0/255.0, alpha: 1.0)
 
 }

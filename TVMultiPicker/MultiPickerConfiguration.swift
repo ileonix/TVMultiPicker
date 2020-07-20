@@ -44,7 +44,9 @@ public struct MultiPickerConfiguration {
         focusedFont: .systemFont(ofSize: 60),
         normalTextColor: UIColor.mpLightGrey,
         normalBgColor: UIColor.clear,
-        normalFont: .systemFont(ofSize: 40)
+        normalFont: .systemFont(ofSize: 40),
+        searchBoxTopOffset: 0,
+        searchPlaceholder: "Search"
     )
     
     public static let singlePickerConfig = MultiPickerConfiguration(
@@ -63,7 +65,30 @@ public struct MultiPickerConfiguration {
         focusedFont: .systemFont(ofSize: 60),
         normalTextColor: UIColor.mpLightGrey,
         normalBgColor: UIColor.clear,
-        normalFont: .systemFont(ofSize: 40)
+        normalFont: .systemFont(ofSize: 40),
+        searchBoxTopOffset: 0,
+        searchPlaceholder: "Search"
+    )
+    
+    public static let bugabooInterPickerConfig = MultiPickerConfiguration(
+        backgroundColor: .black,
+        cellPadding: 20,
+        pickerWidth: 1250,
+        pickerHeight: 66,
+        topOffset: 400,
+        offsetBetweenPickers: 200,
+        unfocusedPickerAlphaValue: 0.7,
+        focusedPickerAlphaValue: 1.0,
+        doneButtonText: "Done",
+        doneButtonBottomOffset: 200,
+        focusedTextColor: UIColor.mpBugabooInter,
+        focusedBgColor: UIColor.clear,
+        focusedFont: .systemFont(ofSize: 60),
+        normalTextColor: UIColor.mpLightGrey,
+        normalBgColor: UIColor.clear,
+        normalFont: .systemFont(ofSize: 40),
+        searchBoxTopOffset: 100,
+        searchPlaceholder: "Search"
     )
     
     let backgroundColor: UIColor
@@ -87,5 +112,8 @@ public struct MultiPickerConfiguration {
     let normalTextColor: UIColor
     let normalBgColor: UIColor
     let normalFont: UIFont
+    
+    let searchBoxTopOffset: Int
+    let searchPlaceholder: String
     
 }

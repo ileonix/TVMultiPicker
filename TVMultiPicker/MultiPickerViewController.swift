@@ -59,11 +59,12 @@ open class MultiPickerViewController<PickedValueType>: UIViewController {
     public typealias ValuePickedAction = (PickedValueType?, UIViewController) -> ()
     
     public var pickers: [HorizontalStringCollectionView] = []
-    
+    public var pickersOriginalData: [String] = []
     var processDataAction: ProcessDataAction?
     var valuePickedAction: ValuePickedAction?
 
     var button: UIButton?
+    var searchBox: UITextField?
     
     var initialPickerIndex: Int = 0
     var configuration = MultiPickerConfiguration.defaultConfig
@@ -72,6 +73,9 @@ open class MultiPickerViewController<PickedValueType>: UIViewController {
         super.viewDidLoad()
         
         configureUI()
+        if configuration.searchBoxTopOffset != 0 {
+            createAndAddSearchBox()
+        }
         addPickers()
         createAndAddButton()
         addFocusGuide()
@@ -82,7 +86,6 @@ open class MultiPickerViewController<PickedValueType>: UIViewController {
         super.viewWillAppear(animated)
         pickers[initialPickerIndex].updateFocus()
     }
-    
     
     /// Initializes and configures new multi-picker.
     ///
@@ -103,10 +106,10 @@ open class MultiPickerViewController<PickedValueType>: UIViewController {
         self.valuePickedAction = valuePickedAction
         self.configuration = configuration
         self.initialPickerIndex = initialPickerIndex
-
         self.pickers = pickers.map {
             HorizontalStringCollectionView(model: $0, configuration: configuration)
         }
+        self.pickersOriginalData = pickers[initialPickerIndex].data
     }
     
     init() {
@@ -131,6 +134,37 @@ open class MultiPickerViewController<PickedValueType>: UIViewController {
             let pickedValue = getPickedValue()
             else { return }
         valuePickedAction?(pickedValue, self)
+    }
+
+    func reloadData(){
+        pickers[initialPickerIndex].reloadData()
+    }
+    
+    @objc func searchEditDidEnd(){
+//        guard
+//            let searchValue = searchBox?.text
+//            else { return }
+        let searchValue: String = searchBox?.text ?? ""
+        print("picker: focus value \(pickers[initialPickerIndex].focusedValue)")
+        print("picker: count \(pickers.count) index \(pickers.endIndex) count2 \(pickers[initialPickerIndex].numberOfItems(inSection: 0))")
+        var index = 0
+        var temp: [String] = []
+        for (i,data) in pickers[initialPickerIndex].data.enumerated() {
+//            print("picker: data \(data)")
+//            if searchValue.capitalized == data.capitalized ||
+            if data.uppercased().contains(searchValue.uppercased()){
+                temp.append(data)
+                index = i
+//                print("picker: match at \(index)")
+            }
+        }
+        if searchValue == "", searchValue.isEmpty {
+//            print("picker: search empty1")
+            pickers[initialPickerIndex].updateDataSource(with: pickersOriginalData)
+        } else {
+            pickers[initialPickerIndex].updateDataSource(with: temp)
+        }
+//        print("picker: search \(searchValue)")
     }
     
     override open func didUpdateFocus(in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
@@ -183,6 +217,20 @@ extension MultiPickerViewController {
         
         button.addTarget(self, action: #selector(buttonTapepd), for: .primaryActionTriggered)
         self.button = button
+    }
+    
+    fileprivate func createAndAddSearchBox() {
+        let textfield = UITextField(frame: .zero)
+        textfield.backgroundColor = .white
+        textfield.placeholder = configuration.searchPlaceholder
+        view.addSubview(textfield)
+        
+        textfield.translatesAutoresizingMaskIntoConstraints = false
+        
+        textfield.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        textfield.topAnchor.constraint(equalTo: view.topAnchor, constant: CGFloat(100.0)).isActive = true
+        textfield.addTarget(self, action: #selector(searchEditDidEnd), for: .editingDidEnd)
+        self.searchBox = textfield
     }
     
     fileprivate func addFocusGuide() {

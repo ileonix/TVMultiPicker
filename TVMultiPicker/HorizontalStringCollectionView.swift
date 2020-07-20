@@ -38,7 +38,7 @@ public class HorizontalStringCollectionView: UICollectionView {
     
     fileprivate var onFocusAction: OnFocusAction?
     
-    fileprivate var data: [String] = []
+    public var data: [String] = []
     
     fileprivate var cellWidth: CGFloat?
     

@@ -33,17 +33,39 @@ class MainViewController: UIViewController {
     
     @objc
     private func buttonTapped() {
-        let picker = MultiPicker.datePicker { date, picker in
-            self.dismiss(animated: true, completion: nil)
-            guard
-                let date = date
-                else { return }
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MMM d, yyyy"
-            
-            self.openPickerButton.setTitle(dateFormatter.string(from: date), for: .normal)
-        }
-        present(picker, animated: true, completion: nil)
+//        let picker = MultiPicker.datePicker { date, picker in
+//            self.dismiss(animated: true, completion: nil)
+//            guard
+//                let date = date
+//                else { return }
+//            let dateFormatter = DateFormatter()
+//            dateFormatter.dateFormat = "MMM d, yyyy"
+//
+//            self.openPickerButton.setTitle(dateFormatter.string(from: date), for: .normal)
+//        }
+//        present(picker, animated: true, completion: nil)
+        
+        let pickerVC = MultiPickerViewController<String>(
+            [
+                PickerDefinition(
+                    data: ["Thailand","United State","Guam"],
+                    cellWidth: nil,
+                    initialValueIndex: 0,
+                    remembersLastFocusedElement: true
+                )
+            ],
+            initialPickerIndex: 0,                  // Initially focused picker will be gender picker
+            configuration: .bugabooInterPickerConfig,          // UI configuration set to default red/black style
+            processDataAction: { pickedValues in
+                return pickedValues[0].value
+            },
+            valuePickedAction: { finalValue, picker in
+                picker.dismiss(animated: true, completion: nil)
+                self.openPickerButton.setTitle(finalValue, for: .normal)
+                print("picker: "+finalValue!)
+            }
+        )
+        present(pickerVC, animated: true, completion: nil)
     }
     
 }
